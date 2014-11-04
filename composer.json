@@ -1,0 +1,23 @@
+{
+    "name": "allboo/propel-laravel",
+    "description": "Propel integration for Laravel framework.",
+    "keywords": ["laravel", "propel", "orm", "Active Record"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Kazinskiy",
+            "email": "alboo@list.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "laravel/framework": "4.2.*",
+        "propel/propel": "~2.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Allboo\\PropelLaravel\\": "src"
+        }
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "providers": [
+    "Allboo\PropelLaravel\GeneratorServiceProvider",
+    "Allboo\PropelLaravel\RuntimeServiceProvider",
+  ]
+}
