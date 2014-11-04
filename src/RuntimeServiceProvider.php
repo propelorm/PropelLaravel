@@ -27,16 +27,31 @@ class RuntimeServiceProvider extends ServiceProvider
             throw new \InvalidArgumentException('Unable to guess Propel runtime config file. Please, initialize the "propel.runtime" parameter.');
         }
 
+        // load pregenerated config
+        if (file_exists(app_path() . '/propel/config.php')) {
+            Propel::init(app_path() . '/propel/config.php');
+            return;
+        }
+
+        // runtime configuration
         /** @var \Propel\Runtime\ServiceContainer\StandardServiceContainer */
         $serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
         $serviceContainer->closeConnections();
         $serviceContainer->checkVersion('2.0.0-dev');
 
         $propel_conf = $this->app->config['propel.propel'];
-        foreach ($propel_conf['runtime']['connections'] as $connection_name) {
+        $runtime_conf = $propel_conf['runtime'];
+
+        // set connections
+        foreach ($runtime_conf['connections'] as $connection_name) {
             $config = $propel_conf['database']['connections'][$connection_name];
             if (!isset($config['classname'])) {
-                $config['classname'] = '\\Propel\\Runtime\\Connection\\ConnectionWrapper';
+                if ($this->app->config['app.debug']) {
+                    $config['classname'] = '\\Propel\\Runtime\\Connection\\DebugPDO';
+                }
+                else {
+                    $config['classname'] = '\\Propel\\Runtime\\Connection\\ConnectionWrapper';
+                }
             }
 
             $serviceContainer->setAdapterClass($connection_name, $config['adapter']);
@@ -45,8 +60,19 @@ class RuntimeServiceProvider extends ServiceProvider
             $manager->setName($connection_name);
             $serviceContainer->setConnectionManager($connection_name, $manager);
         }
+        $serviceContainer->setDefaultDatasource($runtime_conf['defaultConnection']);
 
-        $serviceContainer->setDefaultDatasource($propel_conf['runtime']['defaultConnection']);
+        // set loggers
+        $has_default_logger = false;
+        if (isset($runtime_conf['log'])) {
+            foreach ($runtime_conf['log'] as $logger_name => $logger_conf) {
+                $serviceContainer->setLoggerConfiguration($logger_name, $logger_conf);
+                $has_default_logger |= $logger_name === 'defaultLogger';
+            }
+        }
+        if (!$has_default_logger) {
+            $serviceContainer->setLogger('defaultLogger', \Log::getMonolog());
+        }
 
         Propel::setServiceContainer($serviceContainer);
     }

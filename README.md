@@ -27,6 +27,14 @@ You can now use Propel commands via artisan, ex
 etc.
 
 
+Static Configuration
+-------------
+
+By default it builds configuration from main config `app/config/propel.php` in runtime but you may build static config `app/propel/config.php` by running
+
+    propel:convert-conf
+
+
 Services
 --------
 
