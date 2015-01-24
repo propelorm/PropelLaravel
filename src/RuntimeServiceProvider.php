@@ -10,7 +10,10 @@
 
 namespace Allboo\PropelLaravel;
 
+use Allboo\PropelLaravel\Auth\PropelUserProvider;
 use Illuminate\Support\ServiceProvider;
+use Propel\Common\Config\Exception\InvalidConfigurationException;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Propel;
 
 class RuntimeServiceProvider extends ServiceProvider
@@ -56,10 +59,11 @@ class RuntimeServiceProvider extends ServiceProvider
 
             $serviceContainer->setAdapterClass($connection_name, $config['adapter']);
             $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
-            $manager->setConfiguration($config);
+            $manager->setConfiguration($config + [$propel_conf['paths']]);
             $manager->setName($connection_name);
             $serviceContainer->setConnectionManager($connection_name, $manager);
         }
+
         $serviceContainer->setDefaultDatasource($runtime_conf['defaultConnection']);
 
         // set loggers
@@ -86,6 +90,33 @@ class RuntimeServiceProvider extends ServiceProvider
     {
         if (!class_exists('Propel\\Runtime\\Propel', true)) {
             throw new \InvalidArgumentException('Unable to find Propel, did you install it?');
+        }
+
+        if ('propel' == \Config::get('auth.driver')) {
+            $query_name = \Config::get('auth.user_query', false);
+
+            if ($query_name) {
+                $query = new $query_name;
+                if ( ! $query instanceof Criteria) {
+                    throw new InvalidConfigurationException("Configuration directive «auth.user_query» must contain valid classpath of user Query. Excpected type: instanceof Propel\\Runtime\\ActiveQuery\\Criteria");
+                }
+            } else {
+                $user_class = \Config::get('auth.model');
+
+                $query = new $user_class;
+
+                if ( ! method_exists($query, 'buildCriteria')) {
+                    throw new InvalidConfigurationException("Configuration directive «auth.model» must contain valid classpath of model, which has method «buildCriteria()»");
+                }
+
+                $query = $query->buildPkeyCriteria();
+                $query->clear();
+            }
+
+            \Auth::extend('propel', function(\Illuminate\Foundation\Application $app) use ($query)
+            {
+                return new PropelUserProvider($query, $app->make('hash'));
+            });
         }
     }
 }

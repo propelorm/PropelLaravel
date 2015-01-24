@@ -52,7 +52,6 @@ class GeneratorServiceProvider extends ServiceProvider
 
                 $this->app[$command] = $this->app->share(
                     function ($app) use ($c) {
-                        chdir(app_path() . '/config');
                         return $c;
                     }
                 );
