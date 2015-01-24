@@ -8,13 +8,13 @@ return [
         ],
 
         'paths' => [
-            'projectDir' => app_path() . '/propel',
-            'schemaDir'  => app_path() . '/database',
-            'outputDir'  => app_path() . '/propel',
-            'phpDir'     => app_path() . '/models',
-            'phpConfDir' => app_path() . '/propel',
-            'sqlDir'     => app_path() . '/database',
-            'migrationDir' => app_path() . '/database/migrations',
+            'projectDir' => app_path('/propel'),
+            'schemaDir'  => app_path('/database'),
+            'outputDir'  => base_path('/resources/propel'),
+            'phpDir'     => app_path('/Models'),
+            'phpConfDir' => base_path('/config/propel'),
+            'sqlDir'     => base_path('/database'),
+            'migrationDir' => app_path('/database/migrations'),
             'composerDir' => base_path(),
         ],
 
@@ -34,7 +34,7 @@ return [
                         ],
                     ];
                 }
-            }, app()['config']->get('database.connections')),
+            }, app('config')->get('database.connections')),
             'adapters' => [
                 'mysql' => [
                     'tableType' => 'InnoDB'
@@ -44,12 +44,16 @@ return [
 
         'runtime' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_keys(app('config')->get('database.connections')),
+            'connections' => array_filter( app('config')->get('database.connections'), function($item) {
+                return in_array($item['driver'], ['pgsql', 'mysql']);
+            })
         ],
 
         'generator' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_keys(app('config')->get('database.connections')),
+            'connections' => array_filter( app('config')->get('database.connections'), function($item) {
+                return in_array($item['driver'], ['pgsql', 'mysql']);
+            }),
 
             'targetPackage' => '',
             'namespaceAutoPackage' => false,
