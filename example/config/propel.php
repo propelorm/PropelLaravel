@@ -3,24 +3,22 @@
 return [
     'propel' => [
         'general' => [
-            'project' => 'MyProject',
+            'project' => 'Dachnik',
             'version' => '1.0',
         ],
-
         'paths' => [
-            'projectDir' => app_path('/propel'),
-            'schemaDir'  => app_path('/database'),
-            'outputDir'  => base_path('/resources/propel'),
-            'phpDir'     => app_path('/Models'),
-            'phpConfDir' => base_path('/config/propel'),
-            'sqlDir'     => base_path('/database'),
-            'migrationDir' => app_path('/database/migrations'),
+            'projectDir' => app_path('resources/propel'),
+            'schemaDir'  => app_path('database'),
+            'outputDir'  => base_path('resources/propel'),
+            'phpDir'     => app_path('Models'),
+            'phpConfDir' => base_path('config/propel'),
+            'sqlDir'     => base_path('database'),
+            'migrationDir' => app_path('database/migrations'),
             'composerDir' => base_path(),
         ],
 
         'database' => [
             'connections' => array_map(function($item) {
-                if (in_array($item['driver'], ['pgsql', 'mysql'])) {
                     return [
                         'adapter'  => $item['driver'],
                         'dsn'      => $item['driver'] . ':host=' . $item['host'] . ';port=' . (empty($item['port']) ? '3306' : $item['port']) . ';dbname=' . $item['database'],
@@ -33,8 +31,11 @@ return [
                             ],
                         ],
                     ];
-                }
-            }, app('config')->get('database.connections')),
+                },
+                array_filter(app('config')->get('database.connections'), function($item) {
+                    return in_array($item['driver'], ['pgsql', 'mysql']);
+                })
+            ),
             'adapters' => [
                 'mysql' => [
                     'tableType' => 'InnoDB'
@@ -44,16 +45,16 @@ return [
 
         'runtime' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_filter( app('config')->get('database.connections'), function($item) {
+            'connections' => array_keys(array_filter( app('config')->get('database.connections'), function($item) {
                 return in_array($item['driver'], ['pgsql', 'mysql']);
-            })
+            }))
         ],
 
         'generator' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_filter( app('config')->get('database.connections'), function($item) {
+            'connections' => array_keys(array_filter( app('config')->get('database.connections'), function($item) {
                 return in_array($item['driver'], ['pgsql', 'mysql']);
-            }),
+            })),
 
             'targetPackage' => '',
             'namespaceAutoPackage' => false,
