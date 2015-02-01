@@ -4,7 +4,7 @@ namespace Allboo\PropelLaravel\Auth;
 
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-use Illuminate\Auth\UserProviderInterface as UserProviderInterface;
+use Illuminate\Contracts\Auth\UserProvider as UserProviderInterface;
 use Propel\Runtime\ActiveQuery\Criteria;
 
 class PropelUserProvider implements UserProviderInterface {
