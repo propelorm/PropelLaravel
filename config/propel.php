@@ -3,7 +3,7 @@
 return [
     'propel' => [
         'general' => [
-            'project' => 'Dachnik',
+            'project' => 'My App',
             'version' => '1.0',
         ],
         'paths' => [

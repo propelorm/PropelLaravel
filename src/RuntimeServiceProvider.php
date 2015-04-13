@@ -26,6 +26,10 @@ class RuntimeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__.'/../config/propel.php' => config_path('propel.php'),
+        ]);
+
         if (!$this->app->config['propel.propel.runtime.connections']) {
             throw new \InvalidArgumentException('Unable to guess Propel runtime config file. Please, initialize the "propel.runtime" parameter.');
         }
@@ -48,6 +52,7 @@ class RuntimeServiceProvider extends ServiceProvider
         // set connections
         foreach ($runtime_conf['connections'] as $connection_name) {
             $config = $propel_conf['database']['connections'][$connection_name];
+
             if (!isset($config['classname'])) {
                 if ($this->app->config['app.debug']) {
                     $config['classname'] = '\\Propel\\Runtime\\Connection\\DebugPDO';
@@ -79,20 +84,9 @@ class RuntimeServiceProvider extends ServiceProvider
         }
 
         Propel::setServiceContainer($serviceContainer);
-    }
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        if (!class_exists('Propel\\Runtime\\Propel', true)) {
-            throw new \InvalidArgumentException('Unable to find Propel, did you install it?');
-        }
-
-        if ('propel' == \Config::get('auth.driver')) {
+        // skip auth driver adding if running as CLI to avoid auth model not found
+        if (! \App::runningInConsole() && 'propel' == \Config::get('auth.driver')) {
             $query_name = \Config::get('auth.user_query', false);
 
             if ($query_name) {
@@ -117,6 +111,22 @@ class RuntimeServiceProvider extends ServiceProvider
             {
                 return new PropelUserProvider($query, $app->make('hash'));
             });
+        }
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/propel.php', 'propel'
+        );
+
+        if (!class_exists('Propel\\Runtime\\Propel', true)) {
+            throw new \InvalidArgumentException('Unable to find Propel, did you install it?');
         }
     }
 }
