@@ -1,10 +1,14 @@
 {
-    "name": "allboo/propel-laravel",
+    "name": "scif/propel-laravel",
     "description": "Propel integration for Laravel framework.",
     "keywords": ["laravel", "propel", "orm", "Active Record"],
     "type": "library",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Alexander Zhuravlev",
+            "email": "scif-1986@yandex.ru"
+        },
         {
             "name": "Alex Kazinskiy",
             "email": "alboo@list.ru"
