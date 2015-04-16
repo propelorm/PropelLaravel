@@ -48,7 +48,6 @@ class GeneratorServiceProvider extends ServiceProvider
                 $commands[] = $command;
 
                 $c->setName('propel:' . $c->getName());
-                $c->setAliases(array_map(function($item) {return 'propel:' . $item;}, $c->getAliases()));
 
                 $this->app[$command] = $this->app->share(
                     function ($app) use ($c) {
