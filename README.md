@@ -40,6 +40,24 @@ Package contains Auth driver binding which allows to store user info and fetch (
     …
     'model' => 'MyApp\Models\User', // classname of user entity
 
+After schema creating and model generation you must enhance your model to implement all laravel Auth requirements. Generic user model seems so:
+
+    use MyApp\Models\Base\User as BaseUser;
+    use Illuminate\Auth\Authenticatable;
+    use Illuminate\Auth\Passwords\CanResetPassword;
+    use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+    use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+    class User extends BaseUser implements AuthenticatableContract, CanResetPasswordContract
+    {
+        use Authenticatable, CanResetPassword;
+
+        public function getAuthIdentifier()
+        {
+            return $this->id;
+        }
+    }
+
 Static Configuration
 -------------
 
