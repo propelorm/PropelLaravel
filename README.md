@@ -1,31 +1,44 @@
 propel-laravel
 ==============
 
-Propel2 integration for Laravel framework 4
+Propel2 integration for Laravel framework. Only 5.x versions supported. 4.x version can be found in repo of [initial developer](https://github.com/allBoo/propel-laravel) of current package.
 
 Usage
 -----
 
 Require this package with composer using the following command:
 
-    composer require allboo/propel-laravel
+    composer require scif/propel-laravel
 
-After updating composer, add the ServiceProviders to the providers array in app/config/app.php
+After updating composer, add the ServiceProviders to the providers array in `app/config/app.php`
 
     'Allboo\PropelLaravel\GeneratorServiceProvider',
     'Allboo\PropelLaravel\RuntimeServiceProvider',
 
-Create Propel configuration file `app/config/propel.php`
-Note: See example config in `example/config/propel.php`
-Within provided config schemas files are located into `app/database/` folder, models are generated into `app/models`, migrations into `app/database/migrations`
+Next step is copy example config to your `app/config` directory.
 
+    php artisan vendor:publish --provider 'Allboo\PropelLaravel\RuntimeServiceProvider'
+
+Within provided config schemas files are located into `database/` folder, models are generated into `app/models`, migrations into `app/database/migrations`
 
 You can now use Propel commands via artisan, ex
 
-    php artisan propel:build
+    php artisan propel:model:build
 
 etc.
 
+**Small hint**: you can define namespace of all generated models in schema just as attribute of database:
+
+    <database … namespace="MyApp\Models">
+
+Auth
+--------
+
+Package contains Auth driver binding which allows to store user info and fetch (`Auth::getUser()`) current logged in user as propel model. You need to change two settings in `config/auth.php`:
+
+    'driver' => 'propel', // custom auth provider implemented in current package
+    …
+    'model' => 'MyApp\Models\User', // classname of user entity
 
 Static Configuration
 -------------
@@ -48,3 +61,8 @@ Actually, the `GeneratorServiceProvider` class injects Propel tasks into artisan
 See also
 --------
 [Make Propel models work with Laravel Form::model() without making it an array](https://github.com/stephangroen/propel-laravel)
+
+Authors
+--------
+
+[First version written by Alex Kazynsky](https://github.com/allBoo). Now maintained by [Alexander Zhuralvev](https://github.com/SCIF). Thanks a lot to each [author](https://github.com/SCIF/propel-laravel/graphs/contributors)! Any bug reports and pull requests are appreciated!
