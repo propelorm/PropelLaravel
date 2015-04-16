@@ -45,16 +45,12 @@ return [
 
         'runtime' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_keys(array_filter( app('config')->get('database.connections'), function($item) {
-                return in_array($item['driver'], ['pgsql', 'mysql']);
-            }))
+            'connections' => [app('config')->get('database.default')],
         ],
 
         'generator' => [
             'defaultConnection' => app('config')->get('database.default'),
-            'connections' => array_keys(array_filter( app('config')->get('database.connections'), function($item) {
-                return in_array($item['driver'], ['pgsql', 'mysql']);
-            })),
+            'connections' => [app('config')->get('database.default')],
 
             'targetPackage' => '',
             'namespaceAutoPackage' => false,
