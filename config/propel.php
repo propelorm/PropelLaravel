@@ -7,13 +7,13 @@ return [
             'version' => '1.0',
         ],
         'paths' => [
-            'projectDir' => app_path('resources/propel'),
-            'schemaDir'  => app_path('database'),
+            'projectDir' => base_path('resources/propel'),
+            'schemaDir'  => base_path('database'),
             'outputDir'  => base_path('resources/propel'),
             'phpDir'     => app_path('Models'),
             'phpConfDir' => base_path('config/propel'),
             'sqlDir'     => base_path('database'),
-            'migrationDir' => app_path('database/migrations'),
+            'migrationDir' => base_path('database/migrations'),
             'composerDir' => base_path(),
         ],
 
