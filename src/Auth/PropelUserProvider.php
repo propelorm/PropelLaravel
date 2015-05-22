@@ -83,11 +83,13 @@ class PropelUserProvider implements UserProviderInterface {
     public function retrieveByCredentials(array $credentials)
     {
         $query = $this->query;
+        $user_class = \Config::get('auth.model');
+
         foreach ($credentials as $key => $value)
         {
             if ( ! str_contains($key, 'password'))
             {
-                $query->where('User.'.$key . ' = ?', $value);
+                $query->where("{$user_class}.{$key}" . ' = ?', $value);
             }
         }
 
