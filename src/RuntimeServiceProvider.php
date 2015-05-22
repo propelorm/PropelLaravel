@@ -15,6 +15,7 @@ use Illuminate\Support\ServiceProvider;
 use Propel\Common\Config\Exception\InvalidConfigurationException;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Propel;
+use Symfony\Component\Console\Input\ArgvInput;
 
 class RuntimeServiceProvider extends ServiceProvider
 {
@@ -73,31 +74,37 @@ class RuntimeServiceProvider extends ServiceProvider
 
         // set loggers
         $has_default_logger = false;
+
         if (isset($runtime_conf['log'])) {
             foreach ($runtime_conf['log'] as $logger_name => $logger_conf) {
                 $serviceContainer->setLoggerConfiguration($logger_name, $logger_conf);
                 $has_default_logger |= $logger_name === 'defaultLogger';
             }
         }
+
         if (!$has_default_logger) {
             $serviceContainer->setLogger('defaultLogger', \Log::getMonolog());
         }
 
         Propel::setServiceContainer($serviceContainer);
 
+        $input = new ArgvInput();
+
         // skip auth driver adding if running as CLI to avoid auth model not found
-        if (! \App::runningInConsole() && 'propel' == \Config::get('auth.driver')) {
+        if ('propel:model:build' !== $input->getFirstArgument() && 'propel' === \Config::get('auth.driver')) {
+
             $query_name = \Config::get('auth.user_query', false);
 
             if ($query_name) {
                 $query = new $query_name;
+
                 if ( ! $query instanceof Criteria) {
                     throw new InvalidConfigurationException("Configuration directive «auth.user_query» must contain valid classpath of user Query. Excpected type: instanceof Propel\\Runtime\\ActiveQuery\\Criteria");
                 }
+
             } else {
                 $user_class = \Config::get('auth.model');
-
-                $query = new $user_class;
+                $query      = new $user_class;
 
                 if ( ! method_exists($query, 'buildCriteria')) {
                     throw new InvalidConfigurationException("Configuration directive «auth.model» must contain valid classpath of model, which has method «buildCriteria()»");
