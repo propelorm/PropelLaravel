@@ -88,10 +88,15 @@ class RuntimeServiceProvider extends ServiceProvider
 
         Propel::setServiceContainer($serviceContainer);
 
-        $input = new ArgvInput();
+        $command = false;
+
+        if (\App::runningInConsole()) {
+            $input = new ArgvInput();
+            $command = $input->getFirstArgument();
+        }
 
         // skip auth driver adding if running as CLI to avoid auth model not found
-        if ('propel:model:build' !== $input->getFirstArgument() && 'propel' === \Config::get('auth.driver')) {
+        if ('propel:model:build' !== $command && 'propel' === \Config::get('auth.driver')) {
 
             $query_name = \Config::get('auth.user_query', false);
 
