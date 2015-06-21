@@ -134,7 +134,7 @@ class RuntimeServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../resources/config/propel.php', 'propel'
+            __DIR__.'/../config/propel.php', 'propel'
         );
 
         if (!class_exists('Propel\\Runtime\\Propel', true)) {
