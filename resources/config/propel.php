@@ -8,31 +8,31 @@ return [
         ],
         ### Directories and Filenames ###
         'paths' => [
-              # Directory where the project files (`schema.xml`, etc.) are located.
-              # Default value is current path #
-              'projectDir' => base_path('resources/propel'),
+            # Directory where the project files (`schema.xml`, etc.) are located.
+            # Default value is current path #
+            'projectDir' => base_path('resources/propel'),
 
-              # The directory where Propel expects to find your `schema.xml` file.
-              'schemaDir' => base_path('database'),
+            # The directory where Propel expects to find your `schema.xml` file.
+            'schemaDir' => base_path('database'),
 
-              # The directory where Propel should output classes, sql, config, etc.
-              # Default value is current path #
-              'outputDir' => base_path('resources/propel'),
+            # The directory where Propel should output classes, sql, config, etc.
+            # Default value is current path #
+            'outputDir' => base_path('resources/propel'),
 
-              # The directory where Propel should output generated object model classes.
-              'phpDir' => app_path('Models'),
+            # The directory where Propel should output generated object model classes.
+            'phpDir' => app_path('Models'),
 
-              # The directory where Propel should output the compiled runtime configuration.
-              'phpConfDir' => base_path('config/propel'),
+            # The directory where Propel should output the compiled runtime configuration.
+            'phpConfDir' => base_path('config/propel'),
 
-              # The directory where Propel should output the generated migrations.
-              'migrationDir' => base_path('database/migrations'),
+            # The directory where Propel should output the generated migrations.
+            'migrationDir' => base_path('database/migrations'),
 
-              # The directory where Propel should output the generated DDL (or data insert statements, etc.)
-              'sqlDir' => base_path('database'),
+            # The directory where Propel should output the generated DDL (or data insert statements, etc.)
+            'sqlDir' => base_path('database'),
 
-              # Directory in which your composer.json resides
-              'composerDir' => base_path(),
+            # Directory in which your composer.json resides
+            'composerDir' => base_path(),
         ],
         ## All Database settings ##
         'database' => [
@@ -45,7 +45,7 @@ return [
                         'adapter' => $item['driver'],
                         # Connection class. One of the Propel\Runtime\Connection classes
                         'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
-                         # The PDO dsn
+                        # The PDO dsn
                         'dsn' => $item['driver'] . ':host=' . $item['host'] . ';port=' . (empty($item['port']) ? '3306' : $item['port']) . ';dbname=' . $item['database'],
                         'user' => $item['username'],
                         'password' => $item['password'],
@@ -78,16 +78,16 @@ return [
                 )
             ),
 
-             ## Specific adapter settings
+            ## Specific adapter settings
             'adapters' => [
                 ## Mysql ##
                 'mysql' => [
-                      # Default table type
-                      'tableType' => 'InnoDB', //MyIsam
+                    # Default table type
+                    'tableType' => 'InnoDB', //MyIsam
 
-                      # Keyword used to specify the table engine in the CREATE SQL statement.
-                      # Defaults to 'ENGINE', users of MYSQL < 5 should use 'TYPE' instead.
-                      'tableEngineKeyword' => 'ENGINE', //TYPE,
+                    # Keyword used to specify the table engine in the CREATE SQL statement.
+                    # Defaults to 'ENGINE', users of MYSQL < 5 should use 'TYPE' instead.
+                    'tableEngineKeyword' => 'ENGINE', //TYPE,
                 ],
                 ## Sqlite ##
                 'sqlite' => [
@@ -96,7 +96,7 @@ return [
                 ],
                 ## Oracle ##
                 'oracle' => [
-                      'autoincrementSequencePattern' => '${table}_SEQ',
+                    'autoincrementSequencePattern' => '${table}_SEQ',
                 ],
             ],
         ],
@@ -139,11 +139,26 @@ return [
             ## Log and loggers definitions ##
             # For `type` and `level` options see Monolog documentation https' => '//github.com/Seldaek/monolog
             'log' => [
-                'defaultLogger' => [
-                    'type' => null, //string
-                    'path' => null, //string
+                /*'defaultLogger' => [
+                    'type' => 'stream', // stream | rotating_file | syslog
+                    'path' => require, //string
                     'level' => null, //integer
+                    'bubble' => null, //boolean
+                ],*/
+                /*'defaultLogger' => [
+                    'type' => 'rotating_file', // stream | rotating_file | syslog
+                    'path' => require, //string
+                    'max_files' =>  null, //integer
+                    'level' => null, //integer
+                ],*/
+                /*'defaultLogger' => [
+                    'type' => 'syslog', // stream | rotating_file | syslog
+                    'ident' => require, //string
+                    'facility' => null, //mixed
+                    'level' => null, //integer
+                    'bubble' => null, //boolean
                 ],
+                */
             ],
             ## Profiler configuration ##
             # To enable the profiler for a connection, set the `classname` option to \Propel\Runtime\Connection\ProfilerConnectionWrapper
@@ -151,13 +166,23 @@ return [
             'profiler' => [
                 'classname' => '\Propel\Runtime\Util\Profiler',
                 'slowTreshold' => 0.1,
-                'time' => [
-                    'precision' => 3,
-                    'pad' => 8,
-                ],
-                'memory' => [
-                    'precision' => 3,
-                    'pad' => 8,
+                'details' => [
+                    'time' => [
+                        'precision' => 3,
+                        'pad' => 8,
+                    ],
+                    'memory' => [
+                        'precision' => 3,
+                        'pad' => 8,
+                    ],
+                    'memDelta' => [
+                        'precision' => 3,
+                        'pad' => 8,
+                    ],
+                    'memPeak' => [
+                        'precision' => 3,
+                        'pad' => 8,
+                    ],
                 ],
                 'innerGlue' => ':',
                 'outerGlue' => '|',
@@ -264,10 +289,6 @@ return [
                 # Some sort of "namespacing": All Propel classes with get the Prefix
                 # "My_ORM_Prefix_" just like "My_ORM_Prefix_BookTableMap".
                 'classPrefix' => '', //string
-
-                # Identifier quoting may result in undesired behavior (especially in Postgres),
-                # it can be disabled in DDL by setting this property to true.
-                'disableIdentifierQuoting' => false,
 
                 # Whether the generated `doSelectJoin*()` methods use LEFT JOIN or INNER JOIN
                 # (see ticket:491 and ticket:588 to understand more about why this might be
