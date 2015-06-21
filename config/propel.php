@@ -307,7 +307,7 @@ return [
                     'objectmultiextend' => '\Propel\Generator\Builder\Om\MultiExtendObjectBuilder',
                     'tablemap' => '\Propel\Generator\Builder\Om\TableMapBuilder',
                     'query' => '\Propel\Generator\Builder\Om\QueryBuilder',
-                    'querystub' => ' \Propel\Generator\Builder\Om\ExtensionQueryBuilder',
+                    'querystub' => '\Propel\Generator\Builder\Om\ExtensionQueryBuilder',
                     'queryinheritance' => '\Propel\Generator\Builder\Om\QueryInheritanceBuilder',
                     'queryinheritancestub' => '\Propel\Generator\Builder\Om\ExtensionQueryInheritanceBuilder',
                     'interface' => '\Propel\Generator\Builder\Om\InterfaceBuilder',
