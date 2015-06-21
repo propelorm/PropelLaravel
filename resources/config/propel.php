@@ -91,7 +91,7 @@ return [
                 ],
                 ## Sqlite ##
                 'sqlite' => [
-                    'foreigKey' => null, //string
+                    'foreignKey' => null, //string
                     'tableAlteringWorkaround' => null, //boolean
                 ],
                 ## Oracle ##
