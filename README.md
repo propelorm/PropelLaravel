@@ -100,7 +100,7 @@ Propel configures and manages itself by using static methods and its own service
 Actually, the `GeneratorServiceProvider` class injects Propel tasks into artisan tasks list with prefix `propel:`
 `RuntimeServiceProvider` class initializes Propel runtime configuration
 
-Know issues
+Known issues
 --------
 
 * Cli command `propel:database:reverse` save reversed schema file to root of project
