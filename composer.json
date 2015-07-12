@@ -15,9 +15,9 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.9",
         "laravel/framework": "5.*",
-        "propel/propel": "~2.0"
+        "propel/propel": "~2.0.0-alpha5"
     },
     "autoload": {
         "psr-4": {
