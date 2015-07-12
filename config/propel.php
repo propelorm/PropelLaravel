@@ -6,6 +6,10 @@ return [
             'project' => 'My App',
             'version' => '1.0',
         ],
+        'exclude_tables' => [
+            # some_table name as value, you feel free to use wildcard, for example
+            // 'administrator_*',
+        ],
         ### Directories and Filenames ###
         'paths' => [
             # Directory where the project files (`schema.xml`, etc.) are located.
@@ -298,21 +302,21 @@ return [
                 # Pluralizer class (used to generate plural forms)
                 # Use StandardEnglishPluralizer instead of DefaultEnglishPluralizer for better pluralization
                 # (Handles uncountable and irregular nouns)
-                'pluralizerClass' => '\Propel\Common\Pluralizer\StandardEnglishPluralizer',
+                'pluralizerClass' => \Propel\Common\Pluralizer\StandardEnglishPluralizer::class,
 
                 # Builder classes
                 'builders' => [
-                    'object' => '\Propel\Generator\Builder\Om\ObjectBuilder',
-                    'objectstub' => '\Propel\Generator\Builder\Om\ExtensionObjectBuilder',
-                    'objectmultiextend' => '\Propel\Generator\Builder\Om\MultiExtendObjectBuilder',
-                    'tablemap' => '\Propel\Generator\Builder\Om\TableMapBuilder',
-                    'query' => '\Propel\Generator\Builder\Om\QueryBuilder',
-                    'querystub' => '\Propel\Generator\Builder\Om\ExtensionQueryBuilder',
-                    'queryinheritance' => '\Propel\Generator\Builder\Om\QueryInheritanceBuilder',
-                    'queryinheritancestub' => '\Propel\Generator\Builder\Om\ExtensionQueryInheritanceBuilder',
-                    'interface' => '\Propel\Generator\Builder\Om\InterfaceBuilder',
+                    'object' => \Propel\Generator\Builder\Om\ObjectBuilder::class,
+                    'objectstub' => \Propel\Generator\Builder\Om\ExtensionObjectBuilder::class,
+                    'objectmultiextend' => \Propel\Generator\Builder\Om\MultiExtendObjectBuilder::class,
+                    'tablemap' => \Propel\Generator\Builder\Om\TableMapBuilder::class,
+                    'query' => \Propel\Generator\Builder\Om\QueryBuilder::class,
+                    'querystub' => \Propel\Generator\Builder\Om\ExtensionQueryBuilder::class,
+                    'queryinheritance' => \Propel\Generator\Builder\Om\QueryInheritanceBuilder::class,
+                    'queryinheritancestub' => \Propel\Generator\Builder\Om\ExtensionQueryInheritanceBuilder::class,
+                    'interface' => \Propel\Generator\Builder\Om\InterfaceBuilder::class,
                     # SQL builders
-                    'datasql' => '\Propel\Generator\Builder\Sql\PgsqlDataSQLBuilder',
+                    'datasql' => \Propel\Generator\Builder\Sql\Pgsql\PgsqlDataSQLBuilder::class,
                 ],
             ],
         ],
