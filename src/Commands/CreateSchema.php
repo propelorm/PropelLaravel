@@ -13,7 +13,6 @@ namespace Allboo\PropelLaravel\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Foundation\Inspiring;
 
 class CreateSchema extends Command
 {
@@ -22,19 +21,23 @@ class CreateSchema extends Command
      *
      * @var string
      */
-    protected $signature = 'propel:create-schema {--sample}';
+    protected $signature = 'propel:schema:create {--sample}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create schema';
+    protected $description = 'Create sample or empty schema';
 
     /**
      * Execute the console command.
      *
+     * @param Config $config
+     *
      * @return mixed
+     *
+     * @throws \Exception
      */
     public function handle(Config $config)
     {
@@ -45,7 +48,8 @@ class CreateSchema extends Command
         {
             $type = 'sample';
         }
-        $from = 'vendor/scif/propel-laravel/resources/'.$type.'_schema.xml';
+
+        $from = __DIR__ . '/../../resources/'.$type.'_schema.xml';
         $to = $config->get('propel.propel.paths.schemaDir') . '/' . $config->get('propel.propel.generator.schema.basename') . '.xml';
 
         if( ! copy($from, $to) )
