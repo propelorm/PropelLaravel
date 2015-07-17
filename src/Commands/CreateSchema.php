@@ -50,7 +50,7 @@ class CreateSchema extends Command
 
         if( ! copy($from, $to) )
         {
-            throw \Exception('Failed to copy a file "' . $from . '" to "' . $to . '"');
+            throw new \Exception('Failed to copy a file "' . $from . '" to "' . $to . '"');
         }
 
         $content = file_get_contents($to);
