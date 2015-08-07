@@ -1,5 +1,5 @@
 {
-    "name": "scif/propel-laravel",
+    "name": "propel/propel-laravel",
     "description": "Propel integration for Laravel framework.",
     "keywords": ["laravel", "propel", "orm", "Active Record"],
     "type": "library",
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Allboo\\PropelLaravel\\": "src"
+            "Propel\\PropelLaravel\\": "src"
         }
     }
 }

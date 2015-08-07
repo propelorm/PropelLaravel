@@ -20,7 +20,7 @@ and write after `config` section:
 
 Require this package with composer using the following command:
 
-    composer require scif/propel-laravel
+    composer require propel/propel-laravel
 
 After updating composer, add the ServiceProviders to the providers array in `app/config/app.php`
 
