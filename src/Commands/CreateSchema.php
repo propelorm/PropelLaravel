@@ -5,10 +5,10 @@
  * @author    Soloviev Maxim AKA Big_Shark <BigShark666@gmail.com>
  * @copyright 2015 Soloviev Maxim
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @link      https://github.com/SCIF/laravel-propel
+ * @link      https://github.com/propelorm/PropelLaravel
  */
 
-namespace Allboo\PropelLaravel\Commands;
+namespace Propel\PropelLaravel\Commands;
 
 
 use Illuminate\Console\Command;

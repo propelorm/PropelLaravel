@@ -24,12 +24,12 @@ Require this package with composer using the following command:
 
 After updating composer, add the ServiceProviders to the providers array in `app/config/app.php`
 
-    Allboo\PropelLaravel\GeneratorServiceProvider::class,
-    Allboo\PropelLaravel\RuntimeServiceProvider::class,
+    Propel\PropelLaravel\GeneratorServiceProvider::class,
+    Propel\PropelLaravel\RuntimeServiceProvider::class,
 
 Next step is copy example config to your `app/config` directory.
 
-    php ./artisan vendor:publish --provider 'Allboo\PropelLaravel\RuntimeServiceProvider'
+    php ./artisan vendor:publish --provider 'Propel\PropelLaravel\RuntimeServiceProvider'
 
 Within provided config: schemas files are located into `database/` folder,
 models are generated into `app/models`, migrations into `app/database/migrations`
@@ -112,7 +112,7 @@ Authors
 [First version written by Alex Kazynsky](https://github.com/allBoo).
 Now maintained by [Alexander Zhuralvev](https://github.com/SCIF) and
 [Maxim Solovyev](https://github.com/Big-Shark).
-Thanks a lot to each [author](https://github.com/SCIF/propel-laravel/graphs/contributors)! Any bug reports and pull requests are appreciated!
+Thanks a lot to each [author](https://github.com/propelorm/PropelLaravel/graphs/contributors)! Any bug reports and pull requests are appreciated!
 
 
 See also

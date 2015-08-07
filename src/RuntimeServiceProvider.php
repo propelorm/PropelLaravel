@@ -5,10 +5,10 @@
  * @author    Alex Kazinskiy <alboo@list.ru>
  * @copyright 2014 Alex Kazinskiy
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @link      https://github.com/alboo/laravel-propel
+ * @link      https://github.com/propelorm/PropelLaravel
  */
 
-namespace Allboo\PropelLaravel;
+namespace Propel\PropelLaravel;
 
 use Allboo\PropelLaravel\Auth\PropelUserProvider;
 use Illuminate\Support\ServiceProvider;

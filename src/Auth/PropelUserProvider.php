@@ -1,6 +1,6 @@
 <?php
 
-namespace Allboo\PropelLaravel\Auth;
+namespace Propel\PropelLaravel\Auth;
 
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
