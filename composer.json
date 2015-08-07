@@ -1,13 +1,17 @@
 {
     "name": "propel/propel-laravel",
     "description": "Propel integration for Laravel framework.",
-    "keywords": ["laravel", "propel", "orm", "Active Record"],
+    "keywords": ["laravel", "laravel5", "propel", "propel2", "orm", "activerecord", "Active Record"],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Alexander Zhuravlev",
             "email": "scif-1986@yandex.ru"
+        },
+        {
+            "name": "Maxim Solovyev",
+            "email": "BigShark666@gmail.com"
         },
         {
             "name": "Alex Kazinskiy",
