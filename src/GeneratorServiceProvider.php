@@ -58,7 +58,7 @@ class GeneratorServiceProvider extends ServiceProvider
             }
         }
 
-        $commands[] = \Allboo\PropelLaravel\Commands\CreateSchema::class;
+        $commands[] = \Propel\PropelLaravel\Commands\CreateSchema::class;
 
         $this->commands($commands);
     }
