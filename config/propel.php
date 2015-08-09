@@ -56,7 +56,7 @@ return [
                         # Driver options. See http' => '//www.php.net/manual/en/pdo.construct.php
                         # options must be passed to the contructor of the connection object
                         'options' => [],
-                        # See http' => '//www.php.net/manual/en/pdo.getattribute.php
+                        # See http://www.php.net/manual/en/pdo.getattribute.php
                         # Attributes are set via `setAttribute()` method, after the connection object is created
                         'attributes' => [],
                         #Propel specific settings
@@ -117,7 +117,7 @@ return [
             'tableName' => 'propel_migration',
 
             # The name of the parser class
-            # If you leave this property blank, Propel looks for an appropriate parser class, based on platform' => ' i.e.
+            # If you leave this property blank, Propel looks for an appropriate parser class, based on platform: i.e.
             # if the platform is `MysqlPlatform` then parser is `\Propel\Generator\Reverse\MysqlSchemaParser`
             'parserClass' => null, //string,
         ],
@@ -127,7 +127,7 @@ return [
             'connection' => app('config')->get('database.default'),
 
             # Reverse parser class can be different from migration one
-            # If you leave this property blank, Propel looks for an appropriate parser class, based on platform' => ' i.e.
+            # If you leave this property blank, Propel looks for an appropriate parser class, based on platform: i.e.
             # if the platform is `MysqlPlatform` then parser is `\Propel\Generator\Reverse\MysqlSchemaParser`
             'parserClass' => null, //string
         ],
@@ -136,12 +136,12 @@ return [
         'runtime' => [
             'defaultConnection' => app('config')->get('database.default'),
             # Datasources as defined in database.connections
-            # This section affects config' => 'convert command
+            # This section affects config:convert command
             'connections' => [
                 app('config')->get('database.default'),
             ],
             ## Log and loggers definitions ##
-            # For `type` and `level` options see Monolog documentation https' => '//github.com/Seldaek/monolog
+            # For `type` and `level` options see Monolog documentation https://github.com/Seldaek/monolog
             'log' => [
                 /*'defaultLogger' => [
                     'type' => 'stream', // stream | rotating_file | syslog
@@ -166,7 +166,7 @@ return [
             ],
             ## Profiler configuration ##
             # To enable the profiler for a connection, set the `classname` option to \Propel\Runtime\Connection\ProfilerConnectionWrapper
-            # see' => ' http' => '//propelorm.org/documentation/07-logging.html
+            # see: http://propelorm.org/documentation/07-logging.html
             'profiler' => [
                 'classname' => \Propel\Runtime\Util\Profiler::class,
                 'slowTreshold' => 0.1,
