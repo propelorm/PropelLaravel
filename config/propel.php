@@ -48,7 +48,7 @@ return [
                     return [
                         'adapter' => $item['driver'],
                         # Connection class. One of the Propel\Runtime\Connection classes
-                        'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
+                        'classname' => (app('config')->get('app.debug') ? \Propel\Runtime\Connection\ProfilerConnectionWrapper::class : \Propel\Runtime\Connection\ConnectionWrapper::class),
                         # The PDO dsn
                         'dsn' => $item['driver'] . ':host=' . $item['host'] . ';port=' . (empty($item['port']) ? '3306' : $item['port']) . ';dbname=' . $item['database'],
                         'user' => $item['username'],
@@ -168,7 +168,7 @@ return [
             # To enable the profiler for a connection, set the `classname` option to \Propel\Runtime\Connection\ProfilerConnectionWrapper
             # see' => ' http' => '//propelorm.org/documentation/07-logging.html
             'profiler' => [
-                'classname' => '\Propel\Runtime\Util\Profiler',
+                'classname' => \Propel\Runtime\Util\Profiler::class,
                 'slowTreshold' => 0.1,
                 'details' => [
                     'time' => [
@@ -206,7 +206,7 @@ return [
             'tablePrefix' => null, //string
 
             # Platform class name
-            'platformClass' => 'Propel\Generator\Platform\MysqlPlatform',
+            'platformClass' => \Propel\Generator\Platform\MysqlPlatform::class,
 
             # The package to use for the generated classes.
             # This affects the value of the @package phpdoc tag, and it also affects
