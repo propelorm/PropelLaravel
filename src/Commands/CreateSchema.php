@@ -2,8 +2,7 @@
 /**
  * Laravel Propel integration
  *
- * @author    Soloviev Maxim AKA Big_Shark <BigShark666@gmail.com>
- * @copyright 2015 Soloviev Maxim
+ * @author    Maxim Soloviev<BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/propelorm/PropelLaravel
  */

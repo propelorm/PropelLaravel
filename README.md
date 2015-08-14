@@ -111,7 +111,7 @@ Authors
 
 [First version written by Alex Kazynsky](https://github.com/allBoo).
 Now maintained by [Alexander Zhuralvev](https://github.com/SCIF) and
-[Maxim Solovyev](https://github.com/Big-Shark).
+[Maxim Soloviev](https://github.com/Big-Shark).
 Thanks a lot to each [author](https://github.com/propelorm/PropelLaravel/graphs/contributors)! Any bug reports and pull requests are appreciated!
 
 

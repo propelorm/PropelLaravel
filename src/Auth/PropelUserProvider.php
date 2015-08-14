@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Laravel Propel integration
+ *
+ * @author    Alexander Zhuravlev <scif-1986@ya.ru>
+ * @author    Maxim Soloviev <BigShark666@gmail.com>
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ * @link      https://github.com/propelorm/PropelLaravel
+ */
+
 namespace Propel\PropelLaravel\Auth;
 
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;

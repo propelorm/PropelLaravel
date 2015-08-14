@@ -3,7 +3,8 @@
  * Laravel Propel integration
  *
  * @author    Alex Kazinskiy <alboo@list.ru>
- * @copyright 2014 Alex Kazinskiy
+ * @author    Alexander Zhuravlev <scif-1986@ya.ru>
+ * @author    Maxim Soloviev <BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/propelorm/PropelLaravel
  */
