@@ -30,12 +30,8 @@ class GeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (!class_exists('Propel\\Runtime\\Propel', true)) {
-            throw new \InvalidArgumentException('Unable to find Propel, did you install it?');
-        }
-
         $finder = new Finder();
-        $finder->files()->name('*.php')->in(base_path().'/vendor/propel/propel/src/Propel/Generator/Command')->depth(0);
+        $finder->files()->name('*.php')->in(__DIR__.'/../../../propel/propel/src/Propel/Generator/Command')->depth(0);
 
         $commands = [];
         foreach ($finder as $file) {
@@ -58,7 +54,7 @@ class GeneratorServiceProvider extends ServiceProvider
             }
         }
 
-        $commands[] = \Propel\PropelLaravel\Commands\CreateSchema::class;
+        $commands[] = Commands\CreateSchema::class;
 
         $this->commands($commands);
     }

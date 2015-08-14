@@ -10,10 +10,11 @@
 
 namespace Propel\PropelLaravel;
 
-use Allboo\PropelLaravel\Auth\PropelUserProvider;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Propel\Common\Config\Exception\InvalidConfigurationException;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Connection\ConnectionManagerSingle;
 use Propel\Runtime\Propel;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -57,7 +58,7 @@ class RuntimeServiceProvider extends ServiceProvider
         }
 
         /** @var $serviceContainer \Propel\Runtime\ServiceContainer\StandardServiceContainer */
-        $serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
+        $serviceContainer = Propel::getServiceContainer();
         $serviceContainer->closeConnections();
         $serviceContainer->checkVersion('2.0.0-dev');
 
@@ -68,7 +69,7 @@ class RuntimeServiceProvider extends ServiceProvider
             $config = $propel_conf['database']['connections'][$connection_name];
 
             $serviceContainer->setAdapterClass($connection_name, $config['adapter']);
-            $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
+            $manager = new ConnectionManagerSingle();
             $manager->setConfiguration($config + [$propel_conf['paths']]);
             $manager->setName($connection_name);
             $serviceContainer->setConnectionManager($connection_name, $manager);
@@ -119,7 +120,6 @@ class RuntimeServiceProvider extends ServiceProvider
             if ( ! $query instanceof Criteria) {
                 throw new InvalidConfigurationException("Configuration directive «auth.user_query» must contain valid classpath of user Query. Excpected type: instanceof Propel\\Runtime\\ActiveQuery\\Criteria");
             }
-
         } else {
             $user_class = \Config::get('auth.model');
             $query      = new $user_class;
@@ -132,9 +132,9 @@ class RuntimeServiceProvider extends ServiceProvider
             $query->clear();
         }
 
-        \Auth::extend('propel', function(\Illuminate\Foundation\Application $app) use ($query)
+        \Auth::extend('propel', function(Application $app) use ($query)
         {
-            return new PropelUserProvider($query, $app->make('hash'));
+            return new Auth\PropelUserProvider($query, $app->make('hash'));
         });
     }
 
@@ -148,9 +148,5 @@ class RuntimeServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/propel.php', 'propel'
         );
-
-        if (!class_exists('Propel\\Runtime\\Propel', true)) {
-            throw new \InvalidArgumentException('Unable to find Propel, did you install it?');
-        }
     }
 }
