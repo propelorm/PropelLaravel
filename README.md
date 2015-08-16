@@ -42,7 +42,7 @@ etc.
 
 For new users of propel there is command creating sample `schema.xml` file:
 
-    php ./artisan propel:create-schema
+    php ./artisan propel:schema:create
 
 If you are trying Propel2 on existing database — you can use
 [reverse database](http://propelorm.org/documentation/cookbook/working-with-existing-databases.html) command:
@@ -63,7 +63,7 @@ Package contains Auth driver binding which allows to store user info and fetch (
 
     'driver' => 'propel', // custom auth provider implemented in current package
     …
-    'model' => 'MyApp\Models\User', // classname of user entity
+    'model' => MyApp\Models\User::class, // classname of user entity
 
 After schema creating and model generation you must enhance your model to implement all laravel Auth requirements. Generic user model seems so:
 
@@ -88,7 +88,7 @@ Static Configuration
 
 By default it builds configuration from main config `app/config/propel.php` in runtime but you may build static config `app/propel/config.php` by running
 
-    php ./artisan propel:convert-conf
+    php ./artisan propel:config:convert
 
 
 Services
