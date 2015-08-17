@@ -22,17 +22,16 @@ Require this package with composer using the following command:
 
     composer require propel/propel-laravel
 
-After updating composer, add the ServiceProviders to the providers array in `app/config/app.php`
+After updating composer, add the ServiceProviders to the providers array in `config/app.php`
 
-    Propel\PropelLaravel\GeneratorServiceProvider::class,
-    Propel\PropelLaravel\RuntimeServiceProvider::class,
+    Propel\PropelLaravel\PropelIntegrationServiceProvider::class,
 
-Next step is copy example config to your `app/config` directory.
+Next step is copy example config to your `config` directory.
 
     php ./artisan vendor:publish --provider 'Propel\PropelLaravel\RuntimeServiceProvider'
 
 Within provided config: schemas files are located into `database/` folder,
-models are generated into `app/models`, migrations into `app/database/migrations`
+models are generated into `app/models`, migrations into `database/migrations`
 
 You can now use Propel commands via artisan, for example:
 
@@ -86,7 +85,7 @@ After schema creating and model generation you must enhance your model to implem
 Static Configuration
 -------------
 
-By default it builds configuration from main config `app/config/propel.php` in runtime but you may build static config `app/propel/config.php` by running
+By default it builds configuration from main config `config/propel.php` in runtime but you may build static config `config/propel/config.php` by running
 
     php ./artisan propel:config:convert
 
@@ -97,8 +96,11 @@ Services
 No service is provided.
 
 Propel configures and manages itself by using static methods and its own service container, so no service is registered into Application.
-Actually, the `GeneratorServiceProvider` class injects Propel tasks into artisan tasks list with prefix `propel:`
-`RuntimeServiceProvider` class initializes Propel runtime configuration
+
+Upgrade guide
+--------
+
+[There is](docs/upgrade.md) upgrade guide in `docs` folder.
 
 Known issues
 --------
