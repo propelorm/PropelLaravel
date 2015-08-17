@@ -17,10 +17,31 @@ use Propel\Common\Config\Exception\InvalidConfigurationException;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionManagerSingle;
 use Propel\Runtime\Propel;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Finder\Finder;
 
-class RuntimeServiceProvider extends ServiceProvider
+class PropelIntegrationServiceProvider extends ServiceProvider
 {
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        if (!$this->app->make('config')->has('propel.propel')) {
+            $this->mergeConfigFrom(
+                config_path('propel.php'), 'propel'
+            );
+        }
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/propel.php', 'propel'
+        );
+
+    }
 
     /**
      * Bootstrap the application events.
@@ -29,19 +50,27 @@ class RuntimeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $configurator =$this->app->make('config');
+
         $this->publishes([
             __DIR__.'/../config/propel.php' => config_path('propel.php'),
         ]);
 
+        $converted_conf_file = $configurator->get('propel.propel.paths.phpConfDir') . '/config.php';
+
         // load pregenerated config
-        if (file_exists(app_path() . '/propel/config.php')) {
-            Propel::init(app_path() . '/propel/config.php');
+        if (file_exists($converted_conf_file)) {
+            include $converted_conf_file;
         } else {
             $this->registerRuntimeConfiguration();
         }
 
-        if( 'propel' === \Config::get('auth.driver') ) {
+        if( 'propel' === $configurator->get('auth.driver') ) {
             $this->registerPropelAuth();
+        }
+
+        if (\App::runningInConsole()) {
+            $this->registerCommands();
         }
     }
 
@@ -139,15 +168,34 @@ class RuntimeServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
+    public function registerCommands()
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/propel.php', 'propel'
-        );
+        $finder = new Finder();
+        $finder->files()->name('*.php')->in(__DIR__.'/../../../propel/propel/src/Propel/Generator/Command')->depth(0);
+
+        $commands = [];
+        foreach ($finder as $file) {
+            $ns = '\\Propel\\Generator\\Command';
+            $r  = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
+            if ($r->isSubclassOf(Command::class) && !$r->isAbstract()) {
+                $c = $r->newInstance();
+
+                $command = 'command.propel.' . $c->getName();
+                $commands[] = $command;
+
+                $c->setName('propel:' . $c->getName());
+                $c->setAliases([]);
+
+                $this->app[$command] = $this->app->share(
+                    function ($app) use ($c) {
+                        return $c;
+                    }
+                );
+            }
+        }
+
+        $commands[] = Commands\CreateSchema::class;
+
+        $this->commands($commands);
     }
 }
