@@ -46,7 +46,7 @@ For new users of propel there is command creating sample `schema.xml` file:
 If you are trying Propel2 on existing database — you can use
 [reverse database](http://propelorm.org/documentation/cookbook/working-with-existing-databases.html) command:
 
-    php ./artisan propel:database:reverse mysql
+    php ./artisan propel:database:reverse
 
 Since version 2.0.0-alpha5 there is awesome config node `exclude_tables` in config,
 which allows you to mix different project tables in one database.
@@ -105,7 +105,6 @@ Upgrade guide
 Known issues
 --------
 
-* Cli command `propel:database:reverse` save reversed schema file to root of project
 * There isn't schema file and command for initial user creation, but it's in our [roadmap](https://github.com/SCIF/propel-laravel/issues/4) and will arrive soon
 
 Authors
