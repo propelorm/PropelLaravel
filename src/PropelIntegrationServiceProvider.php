@@ -14,12 +14,14 @@ namespace Propel\PropelLaravel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Propel\Common\Config\Exception\InvalidConfigurationException;
+use Propel\PropelLaravel\Commands\DatabaseReverseCommand;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionManagerSingle;
 use Propel\Runtime\Propel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class PropelIntegrationServiceProvider extends ServiceProvider
 {
@@ -50,7 +52,7 @@ class PropelIntegrationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configurator =$this->app->make('config');
+        $configurator = $this->app->make('config');
 
         $this->publishes([
             __DIR__.'/../config/propel.php' => config_path('propel.php'),
@@ -174,10 +176,17 @@ class PropelIntegrationServiceProvider extends ServiceProvider
         $finder->files()->name('*.php')->in(__DIR__.'/../../../propel/propel/src/Propel/Generator/Command')->depth(0);
 
         $commands = [];
+        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
-            $ns = '\\Propel\\Generator\\Command';
-            $r  = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
+            $classname = '\Propel\Generator\Command\\'.$file->getBasename('.php');
+
+            if ('DatabaseReverseCommand' === $file->getBasename('.php')) {
+                $classname = DatabaseReverseCommand::class;
+            }
+
+            $r  = new \ReflectionClass($classname);
             if ($r->isSubclassOf(Command::class) && !$r->isAbstract()) {
+
                 $c = $r->newInstance();
 
                 $command = 'command.propel.' . $c->getName();
