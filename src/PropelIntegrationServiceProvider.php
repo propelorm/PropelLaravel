@@ -33,10 +33,11 @@ class PropelIntegrationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (!$this->app->make('config')->has('propel.propel')) {
-            $this->mergeConfigFrom(
-                config_path('propel.php'), 'propel'
-            );
+
+        if (!$this->app->make('config')->has('propel.propel.general')
+            && is_file(config_path('propel.php'))
+        ) {
+            $this->app->make('config')->set('propel', require config_path('propel.php'));
         }
 
         $this->mergeConfigFrom(
