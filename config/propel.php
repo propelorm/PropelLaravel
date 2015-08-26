@@ -1,7 +1,6 @@
 <?php
-if (app('config')->has('database')) {
     return [
-        'propel' => [
+        'propel' => app('config')->has('database') ? [
             'general' => [
                 # The name of your project.
                 'project' => 'My App',
@@ -321,8 +320,5 @@ if (app('config')->has('database')) {
                     ],
                 ],
             ],
-        ],
+        ] : []
     ];
-} else {
-    return [];
-}
