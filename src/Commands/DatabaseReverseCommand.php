@@ -10,9 +10,7 @@
 
 namespace Propel\PropelLaravel\Commands;
 
-use Propel\Generator\Command\DatabaseReverseCommand as PropelDatabaseReverseCommand;
-
-class DatabaseReverseCommand extends PropelDatabaseReverseCommand
+class DatabaseReverseCommand extends \Propel\Generator\Command\DatabaseReverseCommand
 {
     protected function configure()
     {
