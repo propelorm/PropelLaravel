@@ -1,0 +1,30 @@
+language: php
+
+php:
+  - 5.5
+
+# This triggers builds to run on the new TravisCI infrastructure.
+# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+
+# cache vendors
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer create-project laravel/laravel test --prefer-source --dev --stability=dev
+  - cd test
+  - php -r '$f="composer.json";$a=json_decode(file_get_contents($f), true);$a["minimum-stability"]="dev";file_put_contents($f, json_encode($a));'
+  - travis_retry composer require propel/propel-laravel:dev-develop
+  - php -r '$f="config/app.php";$w="ViewServiceProvider::class,";$t=file_get_contents($f);$t=str_replace($w, $w.PHP_EOL."Propel\PropelLaravel\PropelIntegrationServiceProvider::class,",$t);file_put_contents($f,$t);'
+  - mysql --host="$DB_HOST" -u"$DB_USERNAME" $DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE;";
+
+script:
+  - php artisan vendor:publish --provider 'Propel\PropelLaravel\PropelIntegrationServiceProvider'
+  - php artisan propel:schema:create --sample
+  - php artisan propel:migration:diff
+  - php artisan propel:migration:up
+  - php artisan propel:model:build
