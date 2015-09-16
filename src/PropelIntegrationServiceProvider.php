@@ -173,38 +173,21 @@ class PropelIntegrationServiceProvider extends ServiceProvider
 
     public function registerCommands()
     {
-        $finder = new Finder();
-        $finder->files()->name('*.php')->in(__DIR__.'/../../../propel/propel/src/Propel/Generator/Command')->depth(0);
+        $commands = [
+            Commands\ConfigConvertCommand::class,
+            Commands\DatabaseReverseCommand::class,
+            Commands\GraphvizGenerateCommand::class,
+            Commands\MigrationDiffCommand::class,
+            Commands\MigrationDownCommand::class,
+            Commands\MigrationMigrateCommand::class,
+            Commands\MigrationStatusCommand::class,
+            Commands\MigrationUpCommand::class,
+            Commands\ModelBuildCommand::class,
+            Commands\SqlBuildCommand::class,
+            Commands\SqlInsertCommand::class,
 
-        $commands = [];
-        /** @var SplFileInfo $file */
-        foreach ($finder as $file) {
-            $classname = '\Propel\Generator\Command\\'.$file->getBasename('.php');
-
-            if ('DatabaseReverseCommand' === $file->getBasename('.php')) {
-                $classname = DatabaseReverseCommand::class;
-            }
-
-            $r  = new \ReflectionClass($classname);
-            if ($r->isSubclassOf(Command::class) && !$r->isAbstract()) {
-
-                $c = $r->newInstance();
-
-                $command = 'command.propel.' . $c->getName();
-                $commands[] = $command;
-
-                $c->setName('propel:' . $c->getName());
-                $c->setAliases([]);
-
-                $this->app[$command] = $this->app->share(
-                    function ($app) use ($c) {
-                        return $c;
-                    }
-                );
-            }
-        }
-
-        $commands[] = Commands\CreateSchema::class;
+            Commands\CreateSchema::class,
+        ];
 
         $this->commands($commands);
     }
