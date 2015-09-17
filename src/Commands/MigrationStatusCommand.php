@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Maxim Soloviev<BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 
@@ -20,7 +22,6 @@ class MigrationStatusCommand extends \Propel\Generator\Command\MigrationStatusCo
 
         $this
             ->setName('propel:migration:status')
-            ->setAliases([])
-        ;
+            ->setAliases([]);
     }
 }

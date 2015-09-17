@@ -1,23 +1,24 @@
 <?php
 
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Alexander Zhuravlev <scif-1986@ya.ru>
  * @author    Maxim Soloviev <BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 
 namespace Propel\PropelLaravel\Auth;
 
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider as UserProviderInterface;
+use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-class PropelUserProvider implements UserProviderInterface {
-
+class PropelUserProvider implements UserProviderInterface
+{
     /**
      * The active propel query.
      *
@@ -35,9 +36,8 @@ class PropelUserProvider implements UserProviderInterface {
     /**
      * Create a new database user provider.
      *
-     * @param  Criteria  $query
-     * @param  \Illuminate\Contracts\Hashing\Hasher  $hasher
-     *
+     * @param Criteria                             $query
+     * @param \Illuminate\Contracts\Hashing\Hasher $hasher
      */
     public function __construct(Criteria $query, HasherContract $hasher)
     {
@@ -48,7 +48,8 @@ class PropelUserProvider implements UserProviderInterface {
     /**
      * Retrieve a user by their unique identifier.
      *
-     * @param  mixed  $identifier
+     * @param mixed $identifier
+     *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveById($identifier)
@@ -59,8 +60,9 @@ class PropelUserProvider implements UserProviderInterface {
     /**
      * Retrieve a user by by their unique identifier and "remember me" token.
      *
-     * @param  mixed   $identifier
-     * @param  string  $token
+     * @param mixed  $identifier
+     * @param string $token
+     *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByToken($identifier, $token)
@@ -73,8 +75,9 @@ class PropelUserProvider implements UserProviderInterface {
     /**
      * Update the "remember me" token for the given user in storage.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $token
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param string                                     $token
+     *
      * @return void
      */
     public function updateRememberToken(UserContract $user, $token)
@@ -86,7 +89,8 @@ class PropelUserProvider implements UserProviderInterface {
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array  $credentials
+     * @param array $credentials
+     *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByCredentials(array $credentials)
@@ -94,23 +98,21 @@ class PropelUserProvider implements UserProviderInterface {
         $query = $this->query;
         $user_class = \Config::get('auth.model');
 
-        foreach ($credentials as $key => $value)
-        {
-            if ( ! str_contains($key, 'password'))
-            {
-                $query->where("{$user_class}.{$key}" . ' = ?', $value);
+        foreach ($credentials as $key => $value) {
+            if (!str_contains($key, 'password')) {
+                $query->where("{$user_class}.{$key}".' = ?', $value);
             }
         }
 
         return $query->findOne();
     }
 
-
     /**
      * Validate a user against the given credentials.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  array  $credentials
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param array                                      $credentials
+     *
      * @return bool
      */
     public function validateCredentials(UserContract $user, array $credentials)
@@ -119,5 +121,4 @@ class PropelUserProvider implements UserProviderInterface {
 
         return $this->hasher->check($plain, $user->getAuthPassword());
     }
-
 }

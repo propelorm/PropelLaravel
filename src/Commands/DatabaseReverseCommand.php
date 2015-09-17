@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Alexander Zhuravlev <scif-1986@ya.ru>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 

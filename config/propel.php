@@ -1,4 +1,5 @@
 <?php
+
     return [
         'propel' => app('config')->has('database') ? [
             'general' => [
@@ -43,15 +44,14 @@
                 # All database sources
                 /***** We use data from database.php, please do not change this if you do not understand this code.  *****/
                 'connections' => array_map(
-                    function($item)
-                    {
+                    function ($item) {
                         return [
                             'adapter' => $item['driver'],
                             # Connection class. One of the Propel\Runtime\Connection classes
                             'classname' => (app('config')->get('app.debug') ? \Propel\Runtime\Connection\ProfilerConnectionWrapper::class : \Propel\Runtime\Connection\ConnectionWrapper::class),
                             # The PDO dsn
-                            'dsn' => $item['driver'] . ':host=' . $item['host'] . ';port=' . (empty($item['port']) ? '3306' : $item['port']) . ';dbname=' . $item['database'],
-                            'user' => $item['username'],
+                            'dsn'      => $item['driver'].':host='.$item['host'].';port='.(empty($item['port']) ? '3306' : $item['port']).';dbname='.$item['database'],
+                            'user'     => $item['username'],
                             'password' => $item['password'],
                             # Driver options. See http' => '//www.php.net/manual/en/pdo.construct.php
                             # options must be passed to the contructor of the connection object
@@ -64,7 +64,7 @@
                                 'charset' => $item['charset'],
                                 #Array of queries to run when the database connection is initialized
                                 'query' => [
-                                    'SET NAMES utf8 COLLATE utf8_unicode_ci, COLLATION_CONNECTION = utf8_unicode_ci, COLLATION_DATABASE = utf8_unicode_ci, COLLATION_SERVER = utf8_unicode_ci'
+                                    'SET NAMES utf8 COLLATE utf8_unicode_ci, COLLATION_CONNECTION = utf8_unicode_ci, COLLATION_DATABASE = utf8_unicode_ci, COLLATION_SERVER = utf8_unicode_ci',
                                 ],
                             ],
                             'slaves' => [
@@ -76,7 +76,7 @@
                     },
                     array_filter(
                         app('config')->get('database.connections'),
-                        function($item) {
+                        function ($item) {
                             return in_array($item['driver'], ['pgsql', 'mysql']);
                         }
                     )
@@ -95,7 +95,7 @@
                     ],
                     ## Sqlite ##
                     'sqlite' => [
-                        'foreignKey' => null, //string
+                        'foreignKey'              => null, //string
                         'tableAlteringWorkaround' => null, //boolean
                     ],
                     ## Oracle ##
@@ -168,24 +168,24 @@
                 # To enable the profiler for a connection, set the `classname` option to \Propel\Runtime\Connection\ProfilerConnectionWrapper
                 # see: http://propelorm.org/documentation/07-logging.html
                 'profiler' => [
-                    'classname' => \Propel\Runtime\Util\Profiler::class,
+                    'classname'    => \Propel\Runtime\Util\Profiler::class,
                     'slowTreshold' => 0.1,
-                    'details' => [
+                    'details'      => [
                         'time' => [
                             'precision' => 3,
-                            'pad' => 8,
+                            'pad'       => 8,
                         ],
                         'memory' => [
                             'precision' => 3,
-                            'pad' => 8,
+                            'pad'       => 8,
                         ],
                         'memDelta' => [
                             'precision' => 3,
-                            'pad' => 8,
+                            'pad'       => 8,
                         ],
                         'memPeak' => [
                             'precision' => 3,
-                            'pad' => 8,
+                            'pad'       => 8,
                         ],
                     ],
                     'innerGlue' => ':',
@@ -266,20 +266,20 @@
                     # To have these methods return DateTime objects instead, you should set these
                     # to empty values
                     'defaultTimeStampFormat' => 'Y-m-d H:i:s',
-                    'defaultTimeFormat' => '%X',
-                    'defaultDateFormat' => '%x',
+                    'defaultTimeFormat'      => '%X',
+                    'defaultDateFormat'      => '%x',
                 ],
                 'objectModel' => [
                     # Whether to add generic getter/setter methods.
                     # Generic accessors are `getByName()`, `getByPosition(), ` and `toArray()`.
                     'addGenericAccessors' => true,
                     # Generic mutators are `setByName()`, `setByPosition()`, and `fromArray()`.
-                    'addGenericMutators' => true,
+                    'addGenericMutators'           => true,
                     'emulateForeignKeyConstraints' => false,
-                    'addClassLevelComment' => true,
-                    'defaultKeyType' => 'phpName',
-                    'addSaveMethod' => true,
-                    'namespaceMap' => 'Map',
+                    'addClassLevelComment'         => true,
+                    'defaultKeyType'               => 'phpName',
+                    'addSaveMethod'                => true,
+                    'namespaceMap'                 => 'Map',
 
                     # Whether to add a timestamp to the phpdoc header of generated OM classes.
                     # If you use a versioning system, don't set this to true, or the classes
@@ -306,19 +306,19 @@
 
                     # Builder classes
                     'builders' => [
-                        'object' => \Propel\Generator\Builder\Om\ObjectBuilder::class,
-                        'objectstub' => \Propel\Generator\Builder\Om\ExtensionObjectBuilder::class,
-                        'objectmultiextend' => \Propel\Generator\Builder\Om\MultiExtendObjectBuilder::class,
-                        'tablemap' => \Propel\Generator\Builder\Om\TableMapBuilder::class,
-                        'query' => \Propel\Generator\Builder\Om\QueryBuilder::class,
-                        'querystub' => \Propel\Generator\Builder\Om\ExtensionQueryBuilder::class,
-                        'queryinheritance' => \Propel\Generator\Builder\Om\QueryInheritanceBuilder::class,
+                        'object'               => \Propel\Generator\Builder\Om\ObjectBuilder::class,
+                        'objectstub'           => \Propel\Generator\Builder\Om\ExtensionObjectBuilder::class,
+                        'objectmultiextend'    => \Propel\Generator\Builder\Om\MultiExtendObjectBuilder::class,
+                        'tablemap'             => \Propel\Generator\Builder\Om\TableMapBuilder::class,
+                        'query'                => \Propel\Generator\Builder\Om\QueryBuilder::class,
+                        'querystub'            => \Propel\Generator\Builder\Om\ExtensionQueryBuilder::class,
+                        'queryinheritance'     => \Propel\Generator\Builder\Om\QueryInheritanceBuilder::class,
                         'queryinheritancestub' => \Propel\Generator\Builder\Om\ExtensionQueryInheritanceBuilder::class,
-                        'interface' => \Propel\Generator\Builder\Om\InterfaceBuilder::class,
+                        'interface'            => \Propel\Generator\Builder\Om\InterfaceBuilder::class,
                         # SQL builders
                         'datasql' => \Propel\Generator\Builder\Sql\Pgsql\PgsqlDataSQLBuilder::class,
                     ],
                 ],
             ],
-        ] : []
+        ] : [],
     ];
