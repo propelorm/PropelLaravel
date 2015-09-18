@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Maxim Soloviev<BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 
@@ -20,7 +22,6 @@ class SqlBuildCommand extends \Propel\Generator\Command\SqlBuildCommand
 
         $this
             ->setName('propel:sql:build')
-            ->setAliases([])
-        ;
+            ->setAliases([]);
     }
 }

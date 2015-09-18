@@ -1,14 +1,15 @@
 <?php
+
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Maxim Soloviev<BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 
 namespace Propel\PropelLaravel\Commands;
-
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -34,26 +35,24 @@ class CreateSchema extends Command
      *
      * @param Config $config
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function handle(Config $config)
     {
         $sampleOption = $this->option('sample');
 
         $type = 'empty';
-        if( $sampleOption )
-        {
+        if ($sampleOption) {
             $type = 'sample';
         }
 
-        $from = __DIR__ . '/../../resources/'.$type.'_schema.xml';
-        $to = $config->get('propel.propel.paths.schemaDir') . '/' . $config->get('propel.propel.generator.schema.basename') . '.xml';
+        $from = __DIR__.'/../../resources/'.$type.'_schema.xml';
+        $to = $config->get('propel.propel.paths.schemaDir').'/'.$config->get('propel.propel.generator.schema.basename').'.xml';
 
-        if( ! copy($from, $to) )
-        {
-            throw new \Exception('Failed to copy a file "' . $from . '" to "' . $to . '"');
+        if (!copy($from, $to)) {
+            throw new \Exception('Failed to copy a file "'.$from.'" to "'.$to.'"');
         }
 
         $content = file_get_contents($to);
@@ -61,11 +60,11 @@ class CreateSchema extends Command
         $name = $config->get('propel.propel.generator.defaultConnection');
         $content = str_replace('**NAME**', $name, $content);
 
-        $nameSpace = $this->laravel->getNamespace() . str_replace(app_path().DIRECTORY_SEPARATOR, '', $config->get('propel.propel.paths.phpDir'));
+        $nameSpace = $this->laravel->getNamespace().str_replace(app_path().DIRECTORY_SEPARATOR, '', $config->get('propel.propel.paths.phpDir'));
         $content = str_replace('**NAMESPACE**', $nameSpace, $content);
 
         file_put_contents($to, $content);
 
-        $this->comment(PHP_EOL . 'Create ' . $to . PHP_EOL);
+        $this->comment(PHP_EOL.'Create '.$to.PHP_EOL);
     }
 }

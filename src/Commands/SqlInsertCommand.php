@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Laravel Propel integration
+ * Laravel Propel integration.
  *
  * @author    Maxim Soloviev<BigShark666@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/propelorm/PropelLaravel
  */
 
@@ -17,10 +19,9 @@ class SqlInsertCommand extends \Propel\Generator\Command\SqlInsertCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this
             ->setName('propel:sql:insert')
-            ->setAliases([])
-        ;
+            ->setAliases([]);
     }
 }
