@@ -28,7 +28,7 @@ After updating composer, add the ServiceProviders to the providers array in `con
 
 Next step is copy example config to your `config` directory.
 
-    php ./artisan vendor:publish --provider 'Propel\PropelLaravel\RuntimeServiceProvider'
+    php ./artisan vendor:publish --provider 'Propel\PropelLaravel\PropelIntegrationServiceProvider'
 
 Within provided config: schemas files are located into `database/` folder,
 models are generated into `app/models`, migrations into `database/migrations`
