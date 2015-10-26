@@ -18,5 +18,9 @@ class DatabaseReverseCommand extends \Propel\Generator\Command\DatabaseReverseCo
         parent::configure();
         $this->getDefinition()->getOption('output-dir')->setDefault(app('config')->get('propel.propel.paths.schemaDir'));
         $this->getDefinition()->getArgument('connection')->setDefault(app('config')->get('propel.propel.reverse.connection'));
+        
+        $this
+            ->setName('propel:database:reverse')
+            ->setAliases([]);
     }
 }
