@@ -19,7 +19,8 @@ before_script:
   - cd test
   - php -r '$f="composer.json";$a=json_decode(file_get_contents($f), true);$a["minimum-stability"]="dev";file_put_contents($f, json_encode($a));'
   - travis_retry composer require propel/propel-laravel:dev-develop
-  - php -r '$f="config/app.php";$w="ViewServiceProvider::class,";$t=file_get_contents($f);$t=str_replace($w, $w.PHP_EOL."Propel\PropelLaravel\PropelIntegrationServiceProvider::class,",$t);file_put_contents($f,$t);'
+  - php -r '$f="config/app.php";$w="ViewServiceProvider::class,";$t=file_get_contents($f);$t=str_replace($w, $w.PHP_EOL."        Propel\\PropelLaravel\\PropelIntegrationServiceProvider::class,",$t);file_put_contents($f,$t);'
+  - php ./artisan app:name 'Propel\LaravelTest'
   - mysql --host="$DB_HOST" -u"$DB_USERNAME" $DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE;";
 
 script:

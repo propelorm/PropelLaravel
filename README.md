@@ -39,9 +39,20 @@ You can now use Propel commands via artisan, for example:
 
 etc.
 
-For new users of propel there is command creating sample `schema.xml` file:
+Using integration command
+------
 
-    php ./artisan propel:schema:create
+For new users of propel there is command providing basic integration features like creating sample `schema.xml` file:
+
+    php ./artisan propel:laravel:init
+
+Manual integration
+------
+
+You can find explanation what do integration command below.
+
+Existing database
+--------
 
 If you are trying Propel2 on existing database — you can use
 [reverse database](http://propelorm.org/documentation/cookbook/working-with-existing-databases.html) command:

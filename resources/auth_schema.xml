@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="**NAME**" defaultIdMethod="native" defaultPhpNamingMethod="underscore" namespace="**NAMESPACE**">
+
+    <table name="password_reminders" idMethod="native" phpName="PasswordReminder">
+        <column name="email" phpName="Email" type="VARCHAR" size="255" required="true"/>
+        <column name="token" phpName="Token" type="VARCHAR" size="255" required="true"/>
+        <index name="password_reminders_email_index">
+            <index-column name="email"/>
+        </index>
+        <unique name="password_reminders_token_uniq">
+            <unique-column name="token"/>
+        </unique>
+        <behavior name="timestampable">
+            <parameter name="disable_updated_at" value="true" />
+        </behavior>
+    </table>
+
+    <table name="users" idMethod="native" phpName="User">
+        <column name="id" phpName="Id" type="SMALLINT" size="8" sqlType="mediumint(8) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="email" phpName="Email" type="VARCHAR" size="64" required="true"/>
+        <column name="password" phpName="Password" type="CHAR" size="128" required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+        <column name="roles" phpName="Roles" type="VARCHAR" size="128" required="true"/>
+        <column name="remember_token" phpName="RememberToken" type="VARCHAR" size="100"/>
+        <unique name="users_email_uniq">
+            <unique-column name="email" />
+        </unique>
+        <unique name="users_remember_token_uniq">
+            <unique-column name="remember_token"/>
+        </unique>
+        <behavior name="timestampable" />
+    </table>
+</database>

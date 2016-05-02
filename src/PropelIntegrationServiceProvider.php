@@ -16,26 +16,17 @@ namespace Propel\PropelLaravel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Propel\Common\Config\Exception\InvalidConfigurationException;
-use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Connection\ConnectionManagerSingle;
+use Propel\Runtime\Exception\LogicException;
+use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\Console\Input\ArgvInput;
 
 class PropelIntegrationServiceProvider extends ServiceProvider
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
-        if (!$this->app->make('config')->has('propel.propel.general')
-            && is_file(config_path('propel.php'))
-        ) {
-            $this->app->make('config')->set('propel', require config_path('propel.php'));
-        }
-
         $this->mergeConfigFrom(
             __DIR__.'/../config/propel.php', 'propel'
         );
@@ -48,11 +39,21 @@ class PropelIntegrationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configurator = $this->app->make('config');
 
-        $this->publishes([
-            __DIR__.'/../config/propel.php' => config_path('propel.php'),
-        ]);
+        if (\App::runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config' => config_path(),
+            ], 'propel-laravel');
+
+            $command = (new ArgvInput())->getFirstArgument();
+
+            if ('propel:' === substr($command, 0, 7) && !is_file(base_path('config/propel.php'))) {
+                // config_path('propel.php') will work too untill config dir in app root
+                throw new PropelException('You MUST run "php ./artisan vendor:publish --provider '.__CLASS__.'" before use propel console commands ');
+            }
+        }
+
+        $configurator = $this->app->make('config');
 
         $converted_conf_file = $configurator->get('propel.propel.paths.phpConfDir').'/config.php';
 
@@ -63,8 +64,17 @@ class PropelIntegrationServiceProvider extends ServiceProvider
             $this->registerRuntimeConfiguration();
         }
 
-        if ('propel' === $configurator->get('auth.driver')) {
-            $this->registerPropelAuth();
+        if (version_compare($this->app->version(), '5.2', '<')) {
+            if ('propel' === $configurator->get('auth.driver')) {
+                $this->registerPropelAuth($configurator->get('auth.model'));
+            }
+        } else {
+            foreach ($configurator->get('auth.providers') as $provider) {
+                if ('propel' === $provider['driver']) {
+                    $this->registerPropelAuth($provider['model']);
+                    break;
+                }
+            }
         }
 
         if (\App::runningInConsole()) {
@@ -98,7 +108,7 @@ class PropelIntegrationServiceProvider extends ServiceProvider
 
             $serviceContainer->setAdapterClass($connection_name, $config['adapter']);
             $manager = new ConnectionManagerSingle();
-            $manager->setConfiguration($config + [$propel_conf['paths']]);
+            $manager->setConfiguration($config + ['paths' => $propel_conf['paths']]);
             $manager->setName($connection_name);
             $serviceContainer->setConnectionManager($connection_name, $manager);
         }
@@ -124,43 +134,32 @@ class PropelIntegrationServiceProvider extends ServiceProvider
     /**
      * Register propel auth provider.
      *
+     * @param string $user_class
+     *
      * @return void
      */
-    protected function registerPropelAuth()
+    protected function registerPropelAuth($user_class)
     {
-        $command = false;
-
-        if (\App::runningInConsole()) {
-            $input = new ArgvInput();
-            $command = $input->getFirstArgument();
-        }
-
         // skip auth driver adding if running as CLI to avoid auth model not found
-        if ('propel:model:build' === $command) {
-            return;
-        }
-
-        $query_name = \Config::get('auth.user_query', false);
-
-        if ($query_name) {
-            $query = new $query_name();
-
-            if (!$query instanceof Criteria) {
-                throw new InvalidConfigurationException('Configuration directive «auth.user_query» must contain valid classpath of user Query. Excpected type: instanceof Propel\\Runtime\\ActiveQuery\\Criteria');
-            }
-        } else {
-            $user_class = \Config::get('auth.model');
-            $query = new $user_class();
-
-            if (!method_exists($query, 'buildCriteria')) {
-                throw new InvalidConfigurationException('Configuration directive «auth.model» must contain valid classpath of model, which has method «buildCriteria()»');
+        if (!class_exists($user_class, true)) {
+            if (\App::runningInConsole()) {
+                \Log::notice('Class ' . $user_class . ' which uses as class of authorized users is not available');
+                return;
             }
 
-            $query = $query->buildPkeyCriteria();
-            $query->clear();
+            throw new LogicException(sprintf('Model "%s" marked as auth model but does not exists and can not be found', $user_class));;
         }
 
-        \Auth::extend('propel', function (Application $app) use ($query) {
+        $query = new $user_class;
+
+        if (!$query instanceof ActiveRecordInterface) {
+            throw new InvalidConfigurationException(sprintf('Model "%s" of propel auth provider is not a valid Propel ModelCriteria class', $user_class));
+        }
+
+        $query = $query->buildPkeyCriteria();
+        $query->clear();
+
+        $this->app['auth']->provider('propel', function (Application $app) use ($query) {
             return new Auth\PropelUserProvider($query, $app->make('hash'));
         });
     }
@@ -179,8 +178,7 @@ class PropelIntegrationServiceProvider extends ServiceProvider
             Commands\ModelBuildCommand::class,
             Commands\SqlBuildCommand::class,
             Commands\SqlInsertCommand::class,
-
-            Commands\CreateSchema::class,
+            Commands\LaravelInit::class,
         ];
 
         $this->commands($commands);
