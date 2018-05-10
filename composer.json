@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.*",
-        "propel/propel": "~2.0.0-alpha5"
+        "propel/propel": "~2.0.0-alpha8"
     },
     "autoload": {
         "psr-4": {
