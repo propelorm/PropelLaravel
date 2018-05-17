@@ -21,8 +21,10 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.*",
-        "propel/propel": "~2.0.0-alpha5"
+        "propel/propel": "^2.0.0"
     },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Propel\\PropelLaravel\\": "src"
