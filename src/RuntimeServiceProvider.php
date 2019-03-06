@@ -22,6 +22,14 @@ use Symfony\Component\Console\Input\ArgvInput;
 class RuntimeServiceProvider extends ServiceProvider
 {
 
+    
+    /**
+     * The config service container, basically the same as app('config')
+     *
+     * @var mixed
+     */
+    private $config;
+
     /**
      * Bootstrap the application events.
      *
@@ -39,8 +47,8 @@ class RuntimeServiceProvider extends ServiceProvider
         } else {
             $this->registerRuntimeConfiguration();
         }
-
-        if( 'propel' === \Config::get('auth.driver') ) {
+        
+        if( 'propel' === $this->config->get('auth.driver') ) {
             $this->registerPropelAuth();
         }
     }
@@ -88,7 +96,7 @@ class RuntimeServiceProvider extends ServiceProvider
         }
 
         if ( ! $has_default_logger) {
-            $serviceContainer->setLogger('defaultLogger', \Log::getMonolog());
+            $serviceContainer->setLogger('defaultLogger', app()->log->getLogger());
         }
 
         Propel::setServiceContainer($serviceContainer);
@@ -113,7 +121,7 @@ class RuntimeServiceProvider extends ServiceProvider
             return ;
         }
 
-        $query_name = \Config::get('auth.user_query', false);
+        $query_name = $this->config->get('auth.user_query', false);
 
         if ($query_name) {
             $query = new $query_name;
@@ -122,7 +130,7 @@ class RuntimeServiceProvider extends ServiceProvider
                 throw new InvalidConfigurationException("Configuration directive «auth.user_query» must contain valid classpath of user Query. Excpected type: instanceof Propel\\Runtime\\ActiveQuery\\Criteria");
             }
         } else {
-            $user_class = \Config::get('auth.model');
+            $user_class = $this->config->get('auth.model');
             $query      = new $user_class;
 
             if ( ! method_exists($query, 'buildCriteria')) {
@@ -146,6 +154,7 @@ class RuntimeServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->config = app()->config;
         $this->mergeConfigFrom(
             __DIR__.'/../config/propel.php', 'propel'
         );
