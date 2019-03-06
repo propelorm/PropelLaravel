@@ -24,8 +24,7 @@ Require this package with composer using the following command:
 
 After updating composer, add the ServiceProviders to the providers array in `app/config/app.php`
 
-    Propel\PropelLaravel\GeneratorServiceProvider::class,
-    Propel\PropelLaravel\RuntimeServiceProvider::class,
+    Propel\PropelLaravel\PropelIntegrationServiceProvider::class,
 
 Next step is copy example config to your `app/config` directory.
 
